@@ -1,6 +1,6 @@
 import os
 import logging
-import churn_library_solution as cls
+import churn_library as cls
 
 logging.basicConfig(
     filename='./logs/churn_library.log',
@@ -53,69 +53,16 @@ def test_import(import_data):
 		raise err
 
 
-def test_eda(df):
+def test_eda(perform_eda):
 	'''
 	test perform eda function
 	'''
-    df['Churn'] = df['Attrition_Flag'].apply(lambda val: 0 if val == "Existing Customer" else 1)
-    X = pd.DataFrame()
-    gender_lst = []
-    gender_groups = df.groupby('Gender').mean()['Churn']
+    cls.perform_eda(df)
 
-    for val in df['Gender']:
-        gender_lst.append(gender_groups.loc[val])
-
-    df['Gender_Churn'] = gender_lst    
-    #education encoded column
-    edu_lst = []
-    edu_groups = df.groupby('Education_Level').mean()['Churn']
-
-    for val in df['Education_Level']:
-        edu_lst.append(edu_groups.loc[val])
-
-    df['Education_Level_Churn'] = edu_lst
-
-    #marital encoded column
-    marital_lst = []
-    marital_groups = df.groupby('Marital_Status').mean()['Churn']
-
-    for val in df['Marital_Status']:
-        marital_lst.append(marital_groups.loc[val])
-
-    df['Marital_Status_Churn'] = marital_lst
-
-    #income encoded column
-    income_lst = []
-    income_groups = df.groupby('Income_Category').mean()['Churn']
-
-    for val in df['Income_Category']:
-        income_lst.append(income_groups.loc[val])
-
-    df['Income_Category_Churn'] = income_lst
-
-    #card encoded column
-    card_lst = []
-    card_groups = df.groupby('Card_Category').mean()['Churn']
-
-    for val in df['Card_Category']:
-        card_lst.append(card_groups.loc[val])
-
-    df['Card_Category_Churn'] = card_lst
-    return df
-
-
-def test_encoder_helper(df, category):
+def test_encoder_helper(encoder_helper):
 	'''
 	test encoder helper
 	'''
-    result_list = []
-    res_group = df.groupby(category).mean()['Churn']
-
-    for val in df[category]:
-        result_list.append(res_group.loc[val])
-        
-    return result_list
-        
 
 
 def test_perform_feature_engineering(perform_feature_engineering):
