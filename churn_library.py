@@ -54,7 +54,7 @@ def import_data(pth):
     output:
             df: pandas dataframe
     '''
-    return pd.read_csv(r"./data/bank_data.csv")
+    return pd.read_csv(pth)
 
 
 def perform_eda(df):
@@ -133,7 +133,7 @@ def encoder_helper(df, category_lst, response=None):
     return df
 
 
-def perform_feature_engineering(df, response=None):
+def perform_feature_engineering(df, keep_cols, response=None):
     '''
     input:
               df: pandas dataframe
@@ -190,8 +190,6 @@ def classification_report_image(y_train,
     plt.text(0.01, 0.7, str(classification_report(y_test, y_test_preds_lr)), {'fontsize': 10}, fontproperties = 'monospace') # approach improved by OP -> monospace!
     plt.axis('off')
     plt.savefig('./images/results/lr_results.png')
-    pass
-
 
 def feature_importance_plot(model, X_data, output_pth):
     '''
@@ -205,7 +203,7 @@ def feature_importance_plot(model, X_data, output_pth):
              None
     '''
     # Calculate feature importances
-    importances = model.coef_
+    importances = model.coef_[0]
     # Sort feature importances in descending order
     indices = np.argsort(importances)[::-1]
 
@@ -313,10 +311,10 @@ def train_models(X_train, X_test, y_train, y_test):
     pass
 
 def main():
-    dataframe = import_data('data\bank_data.csv')
+    dataframe = import_data('data/bank_data.csv')
     perform_eda(dataframe)
     dataframe = encoder_helper(dataframe, category_lst=cat_columns)
-    X_train, X_test, y_train, y_test = perform_feature_engineering(dataframe)
+    X_train, X_test, y_train, y_test = perform_feature_engineering(dataframe, keep_cols)
     train_models(X_train, X_test, y_train, y_test)
 
 if __name__ == "__main__":
