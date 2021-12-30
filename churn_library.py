@@ -5,6 +5,8 @@ Library with helper functions for Predict Customer Churn project.
 
 # import libraries
 import os
+import matplotlib
+matplotlib.use('Agg')
 from sklearn.metrics import plot_roc_curve, classification_report
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
@@ -86,7 +88,7 @@ def perform_eda(dataframe):
     plt.savefig('images/eda/marital_status_distribution.png')
 
     plt.figure(figsize=(20, 10))
-    sns.distplot(dataframe['Total_Trans_Ct'])
+    sns.displot(dataframe['Total_Trans_Ct'])
     plt.savefig('images/eda/total_transaction_distribution.png')
 
     plt.figure(figsize=(20, 10))
@@ -160,7 +162,7 @@ def perform_feature_engineering(dataframe, columns2keep, response=None):
     else:
         y_data = dataframe['Churn']
     x_data[columns2keep] = dataframe[columns2keep]
-    x_data, y_data = normalize(x_data), normalize(y_data)
+    x_data = normalize(x_data, norm="l1")
     return train_test_split(x_data, y_data, test_size=0.3, random_state=42)
 
 
@@ -210,7 +212,7 @@ def classification_report_image(y_train,
     plt.savefig('./images/results/lr_results.png')
 
 
-def feature_importance_plot(model, x_data, output_pth):
+def feature_importance_plot(model, x_data, col_names, output_pth):
     '''
     creates and stores the feature importances in pth
     input:
@@ -227,7 +229,7 @@ def feature_importance_plot(model, x_data, output_pth):
     indices = np.argsort(importances)[::-1]
 
     # Rearrange feature names so they match the sorted feature importances
-    names = [x_data.columns[i] for i in indices]
+    names = [col_names[i] for i in indices]
 
     # Create plot
     plt.figure(figsize=(20, 5))
@@ -261,7 +263,7 @@ def roc_comparsion_plot(lrc, rfc, x_test, y_test, output_pth):
     lrc_plot.plot(ax=axis, alpha=0.8)
     plt.savefig(output_pth)
 
-def train_models(x_train, x_test, y_train, y_test):
+def train_models(x_train, x_test, y_train, y_test, col_names):
     '''
     train, store model results: images + scores, and store models
     input:
@@ -322,7 +324,8 @@ def train_models(x_train, x_test, y_train, y_test):
 
     # Save feature importance from LR model
     feature_importance_plot(
-        lrc, x_test, './images/results/feature_importance_lrc.png')
+        lrc, x_test, 
+        col_names, './images/results/feature_importance_lrc.png')
 
     # classification report
     classification_report_image(y_train,
@@ -341,7 +344,7 @@ def main():
     dataframe = encoder_helper(dataframe, category_lst=cat_columns)
     x_train, x_test, y_train, y_test = perform_feature_engineering(
         dataframe, keep_cols)
-    train_models(x_train, x_test, y_train, y_test)
+    train_models(x_train, x_test, y_train, y_test, keep_cols)
 
 
 if __name__ == "__main__":
