@@ -160,7 +160,7 @@ def perform_feature_engineering(dataframe, columns2keep, response=None):
     else:
         y_data = dataframe['Churn']
     x_data[columns2keep] = dataframe[columns2keep]
-    x_data, y_data = normalize(x_data), normalize(y_data)
+    x_data= normalize(x_data, norm="l1")
     return train_test_split(x_data, y_data, test_size=0.3, random_state=42)
 
 
