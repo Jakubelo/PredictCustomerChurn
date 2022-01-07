@@ -12,7 +12,6 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import normalize
 import shap
 import joblib
 import pandas as pd
@@ -162,7 +161,6 @@ def perform_feature_engineering(dataframe, columns2keep, response=None):
     else:
         y_data = dataframe['Churn']
     x_data[columns2keep] = dataframe[columns2keep]
-    x_data = normalize(x_data, norm="l1")
     return train_test_split(x_data, y_data, test_size=0.3, random_state=42)
 
 
@@ -239,7 +237,7 @@ def feature_importance_plot(model, x_data, col_names, output_pth):
     plt.ylabel('Importance')
 
     # Add bars
-    plt.bar([x for x in range(len(importances))], importances)
+    plt.bar([x for x in range(len(importances))], importances[indices])
 
     # Add feature names as x-axis labels
     plt.xticks(range(x_data.shape[1]), names, rotation=90)
@@ -317,6 +315,7 @@ def train_models(x_train, x_test, y_train, y_test, col_names):
     joblib.dump(lrc, './models/logistic_model.pkl')
 
     # Save feature importance from Random Forest model
+    plt.figure(figsize=(20, 5))
     explainer = shap.TreeExplainer(cv_rfc.best_estimator_)
     shap_values = explainer.shap_values(x_test)
     shap.summary_plot(shap_values, x_test, plot_type="bar", show=False)

@@ -117,12 +117,12 @@ def test_perform_feature_engineering(perform_feature_engineering,
     return x_train, x_test, y_train, y_test
 
 
-def test_train_models(train_models, x_train, x_test, y_train, y_test):
+def test_train_models(train_models, x_train, x_test, y_train, y_test, col_names):
     '''
     test train_models
     '''
     try:
-        train_models(x_train, x_test, y_train, y_test)
+        train_models(x_train, x_test, y_train, y_test, col_names)
         logging.info("Testing models training: SUCCESS")
     except FileNotFoundError as err:
         logging.error("Testing models training: No such file or directory")
@@ -154,4 +154,5 @@ if __name__ == "__main__":
         X_train_df,
         X_test_df,
         y_train_df,
-        y_test_df)
+        y_test_df,
+        cl.keep_cols)
