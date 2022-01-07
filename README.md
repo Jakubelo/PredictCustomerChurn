@@ -3,8 +3,16 @@
 - Project **Predict Customer Churn** of ML DevOps Engineer Nanodegree Udacity
 
 ## Project Description
-Your project description here.
+This is repository of "Predict Customer Churn" project. The output of the script is a ML model trained on Customer Churn data. 
 
 
 ## Running Files
-How do you run your files? What should happen when you run your files?
+
+# Prerequisites
+- python>=3.6.3
+
+To install dependencies:
+`pip install -r requirements.txt`
+
+To run scripts:
+`python churn_script_logging_and_tests.py`
