@@ -5,8 +5,6 @@ Library with helper functions for Predict Customer Churn project.
 
 # import libraries
 import os
-import matplotlib
-matplotlib.use('Agg')
 from sklearn.metrics import plot_roc_curve, classification_report
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
@@ -17,7 +15,10 @@ import joblib
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib
 import seaborn as sns
+
+matplotlib.use('Agg')
 sns.set()
 
 
@@ -237,7 +238,7 @@ def feature_importance_plot(model, x_data, col_names, output_pth):
     plt.ylabel('Importance')
 
     # Add bars
-    plt.bar([x for x in range(len(importances))], importances[indices])
+    plt.bar(list(range(len(importances))), importances[indices])
 
     # Add feature names as x-axis labels
     plt.xticks(range(x_data.shape[1]), names, rotation=90)
@@ -323,7 +324,7 @@ def train_models(x_train, x_test, y_train, y_test, col_names):
 
     # Save feature importance from LR model
     feature_importance_plot(
-        lrc, x_test, 
+        lrc, x_test,
         col_names, './images/results/feature_importance_lrc.png')
 
     # classification report
