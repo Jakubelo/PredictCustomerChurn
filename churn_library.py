@@ -5,6 +5,10 @@ Library with helper functions for Predict Customer Churn project.
 
 # import libraries
 import os
+# Below import have to be on the top of imports
+import matplotlib
+matplotlib.use('Agg')
+
 from sklearn.metrics import plot_roc_curve, classification_report
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
@@ -15,10 +19,8 @@ import joblib
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib
 import seaborn as sns
 
-matplotlib.use('Agg')
 sns.set()
 
 
